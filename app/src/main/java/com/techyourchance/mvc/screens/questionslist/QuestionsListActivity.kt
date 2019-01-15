@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
@@ -26,26 +27,26 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class QuestionsListActivity : BaseActivity(), QuestionsListAdapter.OnQuestionClickListener {
+class QuestionsListActivity : BaseActivity(), QuestionsListViewMvcImpl.Listener {
 
     private var mStackoverflowApi: StackoverflowApi? = null
 
-    private var mLstQuestions: ListView? = null
-    private var mQuestionsListAdapter: QuestionsListAdapter? = null
+
+    private lateinit var mViewMvc: QuestionsListViewMvc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.layout_questions_list)
 
-        mLstQuestions = findViewById(R.id.lst_questions)
-        mQuestionsListAdapter = QuestionsListAdapter(this, this)
-        mLstQuestions!!.adapter = mQuestionsListAdapter
+        mViewMvc = QuestionsListViewMvc(LayoutInflater.from(this), null)
+        mViewMvc.registerListener(this)
 
         mStackoverflowApi = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create<StackoverflowApi>(StackoverflowApi::class.java)
+
+        setContentView(mViewMvc.getRootView())
     }
 
     override fun onStart() {
@@ -75,9 +76,7 @@ class QuestionsListActivity : BaseActivity(), QuestionsListAdapter.OnQuestionCli
         for (questionSchema in questionSchemas) {
             questions.add(Question(questionSchema.id, questionSchema.title))
         }
-        mQuestionsListAdapter!!.clear()
-        mQuestionsListAdapter!!.addAll(questions)
-        mQuestionsListAdapter!!.notifyDataSetChanged()
+       mViewMvc.bindQuestions(questions)
     }
 
     private fun networkCallFailed() {
