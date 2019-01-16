@@ -6,22 +6,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.techyourchance.mvc.R
 import com.techyourchance.mvc.questions.Question
+import com.techyourchance.mvc.screens.common.BaseViewMcv
 
-class QuestionsListItemViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup) : QuestionsListItemViewMvc {
-    private val mRootView = inflater.inflate(R.layout.layout_question_list_item, parent, false)
+class QuestionsListItemViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup) : BaseViewMcv(), QuestionsListItemViewMvc {
     private val txtTitle = findViewById<TextView>(R.id.txt_title)
     private val listeners = arrayListOf<QuestionsListItemViewMvc.Listener>()
     private lateinit var mQuestion: Question
     init {
+        setRootView(inflater.inflate(R.layout.layout_question_list_item, parent, false))
         getRootView().setOnClickListener { listeners.forEach { listener -> listener.onQuestionClicked(mQuestion)} }
-    }
-
-    private fun <T : View> findViewById(res: Int): T {
-        return mRootView.findViewById(res)
-    }
-
-    override fun getRootView(): View {
-        return mRootView
     }
 
     override fun bindQuestion(question: Question) {
