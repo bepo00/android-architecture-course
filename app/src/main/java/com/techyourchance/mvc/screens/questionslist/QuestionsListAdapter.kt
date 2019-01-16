@@ -11,7 +11,10 @@ import com.techyourchance.mvc.R
 import com.techyourchance.mvc.questions.Question
 
 class QuestionsListAdapter(context: Context,
-                           private val mOnQuestionClickListener: OnQuestionClickListener) : ArrayAdapter<Question>(context, 0) {
+                           private val mOnQuestionClickListener: OnQuestionClickListener) : ArrayAdapter<Question>(context, 0), QuestionsListItemViewMvc.Listener {
+    override fun onQuestionClicked(question: Question) {
+        mOnQuestionClickListener.onQuestionClicked(question)
+    }
 
     interface OnQuestionClickListener {
         fun onQuestionClicked(question: Question)
@@ -22,25 +25,17 @@ class QuestionsListAdapter(context: Context,
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         var convertView = view
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.layout_question_list_item, parent, false)
-            val viewHolder = ViewHolder(convertView!!.findViewById(R.id.txt_title))
-            convertView.tag = viewHolder
+            val viewMvc = QuestionsListItemViewMvcImpl(LayoutInflater.from(context), parent)
+            convertView = viewMvc.getRootView()
+            convertView.tag = viewMvc
         }
 
         val question = getItem(position)
 
-        // bind the data to views
-        val viewHolder = convertView.tag as ViewHolder
-        viewHolder.mTitle.text = question!!.title
-
-        // set listener
-        convertView.setOnClickListener { onQuestionClicked(question) }
+        val viewMvc = convertView.tag as QuestionsListItemViewMvcImpl
+        viewMvc.registerListener(this)
+        viewMvc.bindQuestion(question)
 
         return convertView
-    }
-
-    private fun onQuestionClicked(question: Question) {
-        mOnQuestionClickListener.onQuestionClicked(question)
     }
 }
