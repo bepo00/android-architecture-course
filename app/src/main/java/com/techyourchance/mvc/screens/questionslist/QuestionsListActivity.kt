@@ -1,14 +1,7 @@
 package com.techyourchance.mvc.screens.questionslist
 
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ListView
 import android.widget.Toast
 
 import com.techyourchance.mvc.R
@@ -27,17 +20,17 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class QuestionsListActivity : BaseActivity(), QuestionsListViewMvcImpl.Listener {
+class QuestionsListActivity : BaseActivity(), QuestionsListViewMvc.Listener {
 
     private var mStackoverflowApi: StackoverflowApi? = null
 
 
-    private lateinit var mViewMvc: QuestionsListViewMvc
+    private lateinit var mViewMvc: QuestionsListViewMvcImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mViewMvc = QuestionsListViewMvc(LayoutInflater.from(this), null)
+        mViewMvc = QuestionsListViewMvcImpl(LayoutInflater.from(this), null)
         mViewMvc.registerListener(this)
 
         mStackoverflowApi = Retrofit.Builder()
