@@ -1,4 +1,4 @@
-package com.techyourchance.mvc.screens.questionslist
+package com.techyourchance.mvc.screens.common
 
 import android.view.View
 
