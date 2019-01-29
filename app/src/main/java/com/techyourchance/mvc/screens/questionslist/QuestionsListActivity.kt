@@ -23,8 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class QuestionsListActivity : BaseActivity(), QuestionsListViewMvc.Listener {
 
-    private var mStackoverflowApi: StackoverflowApi? = null
-
+    private lateinit var mStackoverflowApi: StackoverflowApi
 
     private lateinit var mViewMvc: QuestionsListViewMvc
 
@@ -45,7 +44,7 @@ class QuestionsListActivity : BaseActivity(), QuestionsListViewMvc.Listener {
     }
 
     private fun fetchQuestions() {
-        mStackoverflowApi!!.fetchLastActiveQuestions(Constants.QUESTIONS_LIST_PAGE_SIZE)
+        mStackoverflowApi.fetchLastActiveQuestions(Constants.QUESTIONS_LIST_PAGE_SIZE)
                 .enqueue(object : Callback<QuestionsListResponseSchema> {
                     override fun onResponse(call: Call<QuestionsListResponseSchema>, response: Response<QuestionsListResponseSchema>) {
                         if (response.isSuccessful) {
