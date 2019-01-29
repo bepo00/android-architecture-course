@@ -4,15 +4,15 @@ import java.util.*
 import kotlin.collections.HashSet
 
 abstract class BaseObservableViewMvc<ListenerType> : BaseViewMvc(),ObservableViewMvc<ListenerType>{
-
-    val mListeners: Set<ListenerType> = hashSetOf()
-        get() = Collections.unmodifiableSet(field)
+    private val _mListeners: Set<ListenerType> = hashSetOf()
+    val mListeners: Set<ListenerType>
+        get() = Collections.unmodifiableSet(_mListeners)
 
     override fun registerListener(listener: ListenerType) {
-        (mListeners as HashSet).add(listener)
+        (_mListeners as HashSet).add(listener)
     }
 
     override fun unregisterListener(listener: ListenerType) {
-        (mListeners as HashSet).remove(listener)
+        (_mListeners as HashSet).remove(listener)
     }
 }

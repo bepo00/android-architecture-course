@@ -30,12 +30,10 @@ class QuestionsListActivity : BaseActivity(), QuestionsListViewMvc.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mViewMvc = QuestionsListViewMvcImpl(LayoutInflater.from(this), null)
+        mViewMvc = QuestionsListViewMvcImpl(mCompositionRoot.getLayoutInflater(), null)
         mViewMvc.registerListener(this)
 
-        mStackoverflowApi = getCompositionRoot().getStackOverflowApi()
-
-
+        mStackoverflowApi = mCompositionRoot.getStackOverflowApi()
 
         setContentView(mViewMvc.getRootView())
     }

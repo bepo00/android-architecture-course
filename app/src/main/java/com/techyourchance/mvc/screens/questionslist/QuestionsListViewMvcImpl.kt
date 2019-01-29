@@ -26,6 +26,6 @@ class QuestionsListViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup
     }
 
     override fun onQuestionClicked(question: Question) {
-        getListeners().forEach { it.onQuestionClicked(question) }
+        mListeners.forEach { it.onQuestionClicked(question) }
     }
 }
