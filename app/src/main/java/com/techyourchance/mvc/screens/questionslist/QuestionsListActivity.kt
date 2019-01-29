@@ -11,6 +11,7 @@ import com.techyourchance.mvc.networking.QuestionsListResponseSchema
 import com.techyourchance.mvc.networking.StackoverflowApi
 import com.techyourchance.mvc.questions.Question
 import com.techyourchance.mvc.screens.common.BaseActivity
+import com.techyourchance.mvc.screens.questiondetails.QuestionDetailsActivity
 
 import java.util.ArrayList
 
@@ -73,6 +74,6 @@ class QuestionsListActivity : BaseActivity(), QuestionsListViewMvc.Listener {
     }
 
     override fun onQuestionClicked(question: Question) {
-        Toast.makeText(this, question.title, Toast.LENGTH_SHORT).show()
+        QuestionDetailsActivity.start(this@QuestionsListActivity, question.id)
     }
 }
