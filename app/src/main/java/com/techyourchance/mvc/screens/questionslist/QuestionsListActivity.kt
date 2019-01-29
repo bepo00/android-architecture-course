@@ -25,12 +25,12 @@ class QuestionsListActivity : BaseActivity(), QuestionsListViewMvc.Listener {
     private var mStackoverflowApi: StackoverflowApi? = null
 
 
-    private lateinit var mViewMvc: QuestionsListViewMvcImpl
+    private lateinit var mViewMvc: QuestionsListViewMvc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mViewMvc = QuestionsListViewMvcImpl(mCompositionRoot.getLayoutInflater(), null)
+        mViewMvc = mCompositionRoot.getViewMcvFactory().getQuestionsListViewMvc(null)
         mViewMvc.registerListener(this)
 
         mStackoverflowApi = mCompositionRoot.getStackOverflowApi()
