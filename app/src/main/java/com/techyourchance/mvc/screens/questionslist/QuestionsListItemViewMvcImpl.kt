@@ -8,7 +8,7 @@ import com.techyourchance.mvc.questions.Question
 import com.techyourchance.mvc.screens.common.BaseObservableViewMvc
 import com.techyourchance.mvc.screens.common.BaseViewMvc
 
-class QuestionsListItemViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup) : BaseObservableViewMvc<QuestionsListItemViewMvc.Listener>(), QuestionsListItemViewMvc {
+class QuestionsListItemViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup?) : BaseObservableViewMvc<QuestionsListItemViewMvc.Listener>(), QuestionsListItemViewMvc {
     private val txtTitle: TextView
     private lateinit var mQuestion: Question
     init {

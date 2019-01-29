@@ -1,25 +1,20 @@
 package com.techyourchance.mvc.screens.questionslist
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
 
-import com.techyourchance.mvc.R
 import com.techyourchance.mvc.questions.Question
+import com.techyourchance.mvc.screens.common.ViewMvcFactory
 
-class QuestionsListAdapter(private val inflater: LayoutInflater,
-                           private val mOnQuestionClickListener: OnQuestionClickListener) : RecyclerView.Adapter<QuestionsListAdapter.ViewHolder>(), QuestionsListItemViewMvc.Listener {
+class QuestionsListAdapter(private val mOnQuestionClickListener: OnQuestionClickListener,
+                           private val viewMvcFactory: ViewMvcFactory) : RecyclerView.Adapter<QuestionsListAdapter.ViewHolder>(), QuestionsListItemViewMvc.Listener {
 
     data class ViewHolder(val viewMvc: QuestionsListItemViewMvc) : RecyclerView.ViewHolder(viewMvc.getRootView())
 
     private var mQuestions: List<Question> = arrayListOf()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): ViewHolder {
-        val viewMvc = QuestionsListItemViewMvcImpl(inflater, viewGroup)
+        val viewMvc = viewMvcFactory.getQuestionsListItemViewMvc(viewGroup)
         viewMvc.registerListener(this)
         return ViewHolder(viewMvc)
     }

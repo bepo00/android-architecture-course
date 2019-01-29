@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import com.techyourchance.mvc.R
 import com.techyourchance.mvc.questions.Question
 import com.techyourchance.mvc.screens.common.BaseObservableViewMvc
-import com.techyourchance.mvc.screens.common.BaseViewMvc
+import com.techyourchance.mvc.screens.common.ViewMvcFactory
 
-class QuestionsListViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?) : BaseObservableViewMvc<QuestionsListViewMvc.Listener>(),QuestionsListAdapter.OnQuestionClickListener, QuestionsListViewMvc {
+class QuestionsListViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?, viewMvcFactory: ViewMvcFactory) : BaseObservableViewMvc<QuestionsListViewMvc.Listener>(),QuestionsListAdapter.OnQuestionClickListener, QuestionsListViewMvc {
     private val mRecyclerView: RecyclerView
     private val mRecyclerViewAdapter: QuestionsListAdapter
 
@@ -17,7 +17,7 @@ class QuestionsListViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup
         setRootView(layoutInflater.inflate(R.layout.layout_questions_list, parent, false))
         mRecyclerView = findViewById(R.id.lst_questions)
         mRecyclerView.layoutManager = LinearLayoutManager(getContext())
-        mRecyclerViewAdapter = QuestionsListAdapter(LayoutInflater.from(getContext()), this)
+        mRecyclerViewAdapter = QuestionsListAdapter(this, viewMvcFactory)
         mRecyclerView.adapter = mRecyclerViewAdapter
     }
 
