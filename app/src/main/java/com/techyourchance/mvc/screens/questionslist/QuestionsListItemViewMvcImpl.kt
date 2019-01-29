@@ -1,14 +1,13 @@
 package com.techyourchance.mvc.screens.questionslist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.techyourchance.mvc.R
 import com.techyourchance.mvc.questions.Question
-import com.techyourchance.mvc.screens.common.BaseViewMcv
+import com.techyourchance.mvc.screens.common.BaseViewMvc
 
-class QuestionsListItemViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup) : BaseViewMcv(), QuestionsListItemViewMvc {
+class QuestionsListItemViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup) : BaseViewMvc(), QuestionsListItemViewMvc {
     private val txtTitle = findViewById<TextView>(R.id.txt_title)
     private val listeners = arrayListOf<QuestionsListItemViewMvc.Listener>()
     private lateinit var mQuestion: Question

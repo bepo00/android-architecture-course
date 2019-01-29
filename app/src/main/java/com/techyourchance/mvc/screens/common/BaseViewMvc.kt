@@ -3,7 +3,7 @@ package com.techyourchance.mvc.screens.common
 import android.content.Context
 import android.view.View
 
-abstract class BaseViewMcv : ViewMvc {
+abstract class BaseViewMvc : ViewMvc {
     private lateinit var mRootView: View
 
     override fun getRootView(): View {
