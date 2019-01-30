@@ -6,7 +6,9 @@ import android.content.Intent
 import android.content.Context
 import android.widget.Toast
 import com.techyourchance.mvc.networking.QuestionDetailsResponseSchema
+import com.techyourchance.mvc.networking.QuestionSchema
 import com.techyourchance.mvc.networking.StackoverflowApi
+import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase
 import com.techyourchance.mvc.questions.QuestionDetails
 import com.techyourchance.mvc.screens.common.BaseActivity
 import retrofit2.Call
@@ -14,16 +16,15 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class QuestionDetailsActivity : BaseActivity() {
-
+class QuestionDetailsActivity : BaseActivity(), FetchQuestionDetailsUseCase.Listener {
     private lateinit var mQuestionId: String
-    private lateinit var mStackoverflowApi: StackoverflowApi
     private lateinit var mViewMvc: QuestionDetailsViewMvc
+    private lateinit var mFetchQuestionDetailsUseCase: FetchQuestionDetailsUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewMvc = mCompositionRoot.getViewMcvFactory().getQuestionDetailsViewMvc(null)
-        mStackoverflowApi = mCompositionRoot.getStackOverflowApi()
+        mFetchQuestionDetailsUseCase = mCompositionRoot.getFetchQuestionDetailsUseCase()
         mQuestionId = intent.getStringExtra(EXTRA_QUESTION_ID)
 
         setContentView(mViewMvc.getRootView())
@@ -31,31 +32,34 @@ class QuestionDetailsActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        fetchQuestionDetails()
+        mFetchQuestionDetailsUseCase.registerListener(this)
+        mFetchQuestionDetailsUseCase.fetchQuestionDetailsAndNotify(mQuestionId)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mFetchQuestionDetailsUseCase.unregisterListener(this)
     }
 
     private fun fetchQuestionDetails() {
-        mStackoverflowApi.fetchQuestionDetails(mQuestionId)
-                .enqueue(object : Callback<QuestionDetailsResponseSchema> {
-                    override fun onFailure(call: Call<QuestionDetailsResponseSchema>, t: Throwable) {
-                        networkCallFailed()
-                    }
 
-                    override fun onResponse(call: Call<QuestionDetailsResponseSchema>, response: Response<QuestionDetailsResponseSchema>) {
-                        if(response.isSuccessful){
-                            val questionSchema = response.body()!!.getQuestion()
-                            val questionDetails = QuestionDetails(questionSchema.id, questionSchema.title, questionSchema.body)
-                            mViewMvc.bindQuestionDetails(questionDetails)
-                        } else{
-                            networkCallFailed()
-                        }
-                    }
+    }
 
-                })
+    fun bindQuestionDetails(questionDetails: QuestionDetails) {
+        mViewMvc.bindQuestionDetails(questionDetails)
     }
 
     private fun networkCallFailed(){
         Toast.makeText(this, R.string.error_network_call_failed, Toast.LENGTH_SHORT).show()
+    }
+
+    //FetchDetailsUseCase Listener
+    override fun onQuestionDetailsFetched(questionDetails: QuestionDetails) {
+        bindQuestionDetails(questionDetails)
+    }
+
+    override fun onQuestionDetailsFetchFailure() {
+        networkCallFailed()
     }
 
     companion object {
